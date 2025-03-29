@@ -1,5 +1,5 @@
-import AuthService, { SignInParams, User } from "@src/services/AuthService";
 import { createContext, ReactNode, useState } from "react";
+import AuthService, { SignInParams, User } from "@src/services/AuthService";
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -13,12 +13,16 @@ type AuthContextProps = {
 export const AuthContext = createContext({} as AuthContextProps);
 
 export function AuthProvider({ children }: AuthProviderProps) {
-  // Adicione o restante do código para que seja possível disponibilizar uma função
-  // de login e o usuário para o contexto de autenticação
+  const [user, setUser] = useState<User | null>(null);
 
-  return (
-    <AuthContext.Provider value={{} as AuthContextProps}>
-      {children}
-    </AuthContext.Provider>
-  );
+  const signin = async ({ email, password }: SignInParams) => {
+
+    const user = await AuthService.signin({ email, password });
+
+    setUser(user);
+  };
+
+  const value = { user, signin };
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

@@ -9,10 +9,16 @@ import { faSpinner } from "../../lib/fontawesome/solid";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
-import AuthService, { User } from "@src/services/AuthService";
+//Para testes editar ROUTES / HEADER / SIGNIN
+//import { useAuthWithContext } from "@src/hooks/useAuthWithContext";
+import { useAuthWithRedux } from "@src/hooks/useAuthwithRedux";
 
-export function SignIn({ setUser }: { setUser: (user: User) => void }) {
+export function SignIn() {
   const [loading, setLoading] = useState(false);
+
+ //Para testes editar ROUTES / HEADER / SIGNIN
+  //const { signin } = useAuthWithContext();
+  const { signin } = useAuthWithRedux();
 
   const navigate = useNavigate();
 
@@ -28,9 +34,9 @@ export function SignIn({ setUser }: { setUser: (user: User) => void }) {
         password: formData.get("password") as string,
       };
 
-      const authenticatedUser = await AuthService.signin(user);
+    
 
-      setUser(authenticatedUser);
+      await signin(user);
       navigate("/");
     } catch {
       toast("Invalid email or password", { type: "error" });
